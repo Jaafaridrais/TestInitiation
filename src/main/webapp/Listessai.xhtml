@@ -1,0 +1,55 @@
+<ui:composition template="/templetev1.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:define name="content" >
+	<div id="page">
+		<h:form >
+		
+
+			<p:dataTable value="#{essaiController.listFormulaires()}" var="item" id="a1">
+				
+				<p:column headerText="ID">
+					
+					<h:outputText value="#{item.refDoc}" />
+				</p:column>
+				<p:column headerText="intitule">
+				
+					<h:outputText value="#{item.intituleDoc}" />
+				</p:column>
+				<p:column headerText="indice">
+				
+					<h:outputText value="#{item.indiceDoc}" />
+				</p:column>
+				
+				<p:column headerText="Date Application">
+				
+					<h:outputText value="#{item.dateApplication}" />
+				</p:column>
+				<p:column style="width:20%" exportable="false">
+				
+				 <p:commandButton value="Télécharger" ajax="false"  actionListener="#{essaiController.FileDownloaddoc()}"  icon="ui-icon-arrowthick-1-s">
+					        	<f:param name="id" value="#{item.refDoc}"/>
+					        <p:fileDownload value="#{essaiController.fileDow}" />
+					    </p:commandButton>
+				</p:column>
+				<p:column headerText="Editer">
+					
+					<h:commandLink  value ="Editer" action="#{essaiController.prepareEdite(item)}"/>
+				</p:column>
+				<p:column headerText="Archiver" >
+					
+					<h:commandLink  value="Archiver" action="#{essaiController.prepreArchive(item)}"/>
+				</p:column>
+			</p:dataTable>
+			
+		
+			<br />
+			<h:commandLink action="#{essaiController.prepareCreate}" value="Ajouter" />
+		</h:form>
+</div>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,72 @@
+<ui:composition template="/templateLPEE.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:define name="Title">
+		Validation de l'efficacité des actions
+	</ui:define>
+
+	
+	
+	<ui:define name="content" >
+	
+    
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <fieldset style="width:80%;  margin-left: 10%;" >
+	    <legend ><span><b> </b></span></legend>
+	    <br/>
+            <h:form>
+           
+                <h:panelGrid columns="2" cellpadding="7">
+                  
+                    
+                    <h:outputLabel  value="Les actions correctives :" style="font-weight: bold;text-decoration: underline;" /><h:outputLabel value=" "></h:outputLabel>
+                    <h:outputLabel value="Description" for="descriptionc" style="font-weight: bold;"/>
+                    <h:outputLabel id="descriptionc" value="#{ficheAnomalieController.selected.actionCorrective.description}"/>
+                     <h:outputLabel value="Date d'application" for="datea" style="font-weight: bold;"/>
+                    <h:outputLabel id="datea" value="#{ficheAnomalieController.selected.actionCorrective.dateReel}"/>
+                    
+                    <h:outputLabel value="Les actions curatives :" style="font-weight: bold;text-decoration: underline;"/><h:outputLabel value=" "></h:outputLabel>
+                    <h:outputLabel value="Descritption" for="description" style="font-weight: bold;"></h:outputLabel>
+                    <h:outputLabel id="description" value="#{ficheAnomalieController.selected.actionCurative.description}"></h:outputLabel>
+                    <h:outputLabel value="Date application" for="date" style="font-weight: bold;"></h:outputLabel>
+                    <h:outputLabel id="date" value="#{ficheAnomalieController.selected.actionCurative.dateReel}"></h:outputLabel>
+                    <h:outputLabel  value="Evaluation d'efficacité :" style="font-weight: bold;text-decoration: underline;" /><h:outputLabel value=" "></h:outputLabel>
+                    
+        		    <h:outputLabel value="Criteres efficacité des actions Curatives" for="curatives"  />
+                    <h:inputText id="curatives" value="#{ficheAnomalieController.selected.critereCurative}" title="curatives" />
+        		    <h:outputLabel value="Criteres efficacité des actions Corrective" for="corrective" />
+                    <h:inputText id="corrective" value="#{ficheAnomalieController.selected.critereCorrective}" title="corrective" />
+        		   
+                     <h:outputLabel value="Vérification efficacité des actions Curatives" for="curative" />
+                    
+                    <h:selectOneRadio  value="#{ficheAnomalieController.selected.efficaciteCurative}"> 
+                    <f:selectItem itemLabel="Efficaces" itemValue="#{true}" /> 
+            		<f:selectItem itemLabel="Non efficaces" itemValue="#{false}" />  
+           			
+        		    </h:selectOneRadio> 
+                    <h:outputLabel value="Vérification efficacité des actions Correctives" for="correctives" />
+                    <h:selectOneRadio  value="#{ficheAnomalieController.selected.efficaciteCorrective}"> 
+                    <f:selectItem itemLabel="Efficaces" itemValue="#{true}" /> 
+            		<f:selectItem itemLabel="Non efficaces" itemValue="#{false}" />  
+           			
+        		    </h:selectOneRadio> 
+        		    <h:outputLabel value="Commentaires sur les actions en cas de diffculté d'application" for="commentaire" />
+        		     <p:inputTextarea id="commentaire" value="#{ficheAnomalieController.selected.commentaire}" title="commentaire" />
+        		    
+        		</h:panelGrid>
+                <br />
+                <p:commandButton action="#{ficheAnomalieController.Valider}" value="OK" image="ui-icon ui-icon-check"/>
+                <br />
+               
+              
+            </h:form>
+    </fieldset>
+
+		</ui:define>
+		</ui:composition>

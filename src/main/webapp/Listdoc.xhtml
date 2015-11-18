@@ -1,0 +1,179 @@
+<ui:composition template="/templateLPEE.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:define name="Title">
+		Gestion des documents
+	</ui:define>
+<ui:define name="content" >
+	
+		<h:form id="form">
+		
+
+			<p:dataTable id="table1" value="#{documentController.listDocument()}" var="item"   paginator="true"
+				rows="6" emptyMessage="Document non trouvé"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="6,12,18" >
+				
+				<p:column headerText="Réference">
+					
+					<h:outputText value="#{item.refDoc}" />
+				</p:column>
+				<p:column headerText="intitule" filterBy="#{item.intituleDoc}" filterMatchMode="exact">
+				
+					<h:outputText value="#{item.intituleDoc}" />
+				</p:column>
+				<p:column headerText="indice">
+				
+					<h:outputText value="#{item.indiceDoc}" />
+				</p:column>
+				
+				<p:column headerText="Date Application">
+				
+					<h:outputText value="#{item.dateApplication}" />
+				</p:column>
+				<p:column style="width:20%" exportable="false" headerText="télecharger">
+				
+				 <p:commandButton value="Télécharger" ajax="false"  actionListener="#{documentController.FileDownloaddoc}"  icon="ui-icon-arrowthick-1-s">
+					        	<f:param name="id" value="#{item.refDoc}"/>
+					        <p:fileDownload value="#{documentController.fileDow}" />
+					    </p:commandButton>
+				</p:column>
+				<p:column headerText="Editer">
+					 <p:commandButton value="Editer" update=":form1:pnl" oncomplete="PF('docUDialog').show()" title="Modification" icon="ui-icon-pencil" style="float:left;margin-right:10px">
+                     <f:setPropertyActionListener value="#{item}" target="#{documentController.selected}"/>
+         
+              </p:commandButton>
+				</p:column>
+				<p:column headerText="Archiver" >
+
+					<p:commandButton value="Archiver" update=":u:docArchive" oncomplete="PF('docArDialog').show()" title="Archiver"  style="float:left;margin-right:10px">
+                     <f:setPropertyActionListener value="#{item}" target="#{documentController.selected}"/>
+         
+               </p:commandButton>
+				</p:column>
+				<p:column headerText="diffuser">
+					 <p:commandButton value="diffuser"  action="#{documentController.diffuse}">
+                     <f:setPropertyActionListener value="#{item}" target="#{documentController.selected}"/>
+         
+              </p:commandButton>
+				</p:column>
+				<p:column headerText="Afficher detail">
+				<p:commandLink update=":form11:docDetail" oncomplete="PF('docDialog').show()" title="View Detail" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px">
+            <f:setPropertyActionListener value="#{item}" target="#{documentController.selected}"/>
+         
+               </p:commandLink>
+               </p:column>
+               	<f:facet name="footer">
+					<p:outputPanel>	
+					<p:commandButton action="#{documentController.prepareCreate}" value="Ajouter" icon="ui-icon-adds"/>
+
+					</p:outputPanel>
+				</f:facet>
+			</p:dataTable>
+			
+  	
+</h:form>
+ </ui:define>
+ <ui:define name="contentDialog">
+		<h:form id="form11">
+		<p:dialog header="Detail de document" widgetVar="docDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+        <p:outputPanel id="docDetail" style="text-align:center;">
+            <p:panelGrid  columns="2" >
+                
+ 
+                <h:outputText value="Réference:" />
+                <h:outputText value="#{documentController.selected.refDoc}" />
+ 
+                <h:outputText value="Désignation:" />
+                <h:outputText value="#{documentController.selected.intituleDoc}" />
+ 
+                <h:outputText value="Indice:" />
+                <h:outputText value="#{documentController.selected.indiceDoc}"/>
+                <h:outputText value="Document de ratachement" />
+                <h:outputText value="#{documentController.selected.documentRatachement}"/>
+                
+                <h:outputText value="Date d'application" />
+                <h:outputText value="#{documentController.selected.dateApplication}" />
+                <h:outputText value="Type de document" />
+                <h:outputText value="#{documentController.selected.typeDocument.intituleTypeDoc}" />
+                <h:outputText value="Processus" />
+                <h:outputText value="#{documentController.selected.processus.intitule}" />
+                <h:outputText value="Méthode d'essai" />
+                <h:outputText value="#{documentController.selected.methodeEssai}"/>
+                <h:outputText value="Acridité" />
+                <p:selectOneRadio  value="#{documentController.selected.acredite}">  
+                    <f:selectItem itemLabel="Oui" itemValue="#{true}" />
+            		<f:selectItem itemLabel="Non" itemValue="#{false}" />  
+           		</p:selectOneRadio> 
+        		<h:outputText value="Date d'homologation" />
+                <h:outputText value="#{documentController.selected.dateHomologation}" />
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    </h:form>
+		  <h:form id="form1">
+    	<p:dialog header="Modification" widgetVar="docUDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+       <p:growl id="growl" showDetail="true" sticky="false" />
+             <h:panelGrid id="pnl" columns="2" cellpadding="7">
+                     <p:outputLabel value="Réference de document" for="identifient" />
+                    <h:outputText id="identifient" value="#{documentController.selected.refDoc}" title="ID" style="width: 200px" />
+                
+                    <p:outputLabel value="Désignation" for="libelle" />
+                    <p:inputText id="libelle" value="#{documentController.selected.intituleDoc}" title="Libelle" required="true" style="width: 200px" requiredMessage="Intitule est obligatoire"/>
+              
+                 <p:outputLabel value="Méthode d'essai" fro="methode"  />
+                    <p:inputText id="methode" value="#{documentController.selected.methodeEssai}" title="methode"  style="width: 200px" />
+                  
+                    <p:outputLabel value="Date d'homologation" for="datehomologue" />
+                    <p:calendar id="datehomologue" value="#{documentController.selected.dateHomologation}" title="datehomologue" pattern="yyyy-MM-dd" style="width: 200px"> </p:calendar>
+                       
+                      <h:outputLabel value="Acredité" for="acredite" />
+                    
+                    <p:selectOneRadio  value="#{documentController.selected.acredite}">  
+                    <f:selectItem itemLabel="Oui" itemValue="#{true}" />
+            		<f:selectItem itemLabel="Non" itemValue="#{false}" />  
+           			
+        		    </p:selectOneRadio> 
+                </h:panelGrid>
+                
+               <br />
+                <p:commandButton action="#{documentController.edit}" value="Modifier" image="ui-icon ui-icon-check" update=":form:table1, growl" oncomplete="PF('docUDialog').hide()"/>
+                <br />
+       
+    </p:dialog>
+	</h:form>
+	<h:form enctype="multipart/form-data" id="u">
+	<p:dialog header="Archiver Document" widgetVar="docArDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+        <p:outputPanel id="docArchive" >
+                <h:panelGrid id="pnl1" columns="2">
+                     <h:outputLabel value="ID" for="ID" />
+                    <h:outputText id="Réference" value="#{documentController.selected.refDoc}" title="ID" style="width: 200px"/>
+                 
+                    <h:outputLabel value="intitule" for="libelle" />
+                    <h:outputText id="libelle" value="#{documentController.selected.intituleDoc}" title="Libelle" style="width: 200px"/>
+                 <h:outputLabel value="Fichier"/>
+                     <p:fileUpload id="upload"  label="Choix de Fichier"  cancelLabel="Annuler" uploadLabel="Telecharger Le Fichier" 
+						invalidFileMessage="Le fichier est invalide. Seuls les fichiers PDF sont autorisés"
+						invalidSizeMessage="La taille du fichier dépasse la limite de 20 Mo"
+						fileUploadListener="#{documentController.doUpload}"
+ 						dragDropSupport="false" fileLimit="1" mode="advanced" 
+						 sizeLimit="100000000" 
+						allowTypes="/(\.|\/)(pdf)$/" > 
+				     <f:attribute name="NomFichier" value="document"/>
+ 					</p:fileUpload> 
+                </h:panelGrid>
+                 <p:blockUI block="pnl1" trigger="u:upload" />
+                <br />
+                <p:commandButton action="#{documentController.archiver}" value="Archiver" image="ui-icon ui-icon-check" update=":form:table1" oncomplete="PF('docArDialog').hide()"/>
+                <br />
+               
+               
+              </p:outputPanel>
+              </p:dialog>
+            </h:form>
+
+</ui:define>
+</ui:composition>

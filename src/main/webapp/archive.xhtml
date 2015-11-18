@@ -1,0 +1,49 @@
+<ui:composition template="/templetev1.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+	
+	
+	<ui:define name="content" >
+	<div id="page">
+    
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+             <fieldset style="width:80%;  margin-left: 10%;" >
+	    <legend ><span><b>Archiver Le Document</b></span></legend>
+	    <br/>
+            <h:form enctype="multipart/form-data" id="u">
+                <h:panelGrid id="pnl" columns="2">
+                     <h:outputLabel value="ID" for="ID" />
+                    <h:outputText id="Réference" value="#{documentController.selected.refDoc}" title="ID" style="width: 200px"/>
+                 
+                    <h:outputLabel value="intitule" for="libelle" />
+                    <h:outputText id="libelle" value="#{documentController.selected.intituleDoc}" title="Libelle" style="width: 200px"/>
+                 <h:outputLabel value="Fichier"/>
+                     <p:fileUpload id="upload"  label="Choix de Fichier"  cancelLabel="Annuler" uploadLabel="Telecharger Le Fichier" 
+						invalidFileMessage="Le fichier est invalide. Seuls les fichiers PDF sont autorisés"
+						invalidSizeMessage="La taille du fichier dépasse la limite de 20 Mo"
+						fileUploadListener="#{documentController.doUpload}"
+ 						dragDropSupport="false" fileLimit="1" mode="advanced" 
+						 sizeLimit="100000000" 
+						allowTypes="/(\.|\/)(pdf)$/" > 
+				     <f:attribute name="NomFichier" value="document"/>
+ 					</p:fileUpload> 
+                </h:panelGrid>
+                 <p:blockUI block="pnl" trigger="u:upload" />
+                <br />
+                <p:commandButton action="#{documentController.archiver}" value="Ok" image="ui-icon ui-icon-check"/>
+                <br />
+               
+               
+              
+            </h:form>
+             </fieldset>
+</div>
+		</ui:define>
+		</ui:composition>

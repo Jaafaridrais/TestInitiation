@@ -1,0 +1,100 @@
+<ui:composition template="/templateLPEE.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+	<ui:define name="Title">
+	Détail fiche d'anomalie
+	</ui:define>
+	
+	<ui:define name="content" >
+
+    
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form style="color: black; ">
+              <h:panelGrid id="output">
+                <h:panelGrid  columns="2" cellpadding="7" >
+                     <h:outputLabel value="Numero Fiche" for="identifient" style="font-weight: bold;"/>
+                    <h:outputText id="identifient" value="#{ficheAnomalieController.selected.numFiche}" title="ID" />
+                    
+                    <h:outputLabel value="Constat" for="constat" style="font-weight: bold;"/>
+                    <h:outputText id="constat" value="#{ficheAnomalieController.selected.constat}" title="Libelle" />
+                    <h:outputLabel value="Responsable de traitement" for="personnel" style="font-weight: bold;" />
+                    <h:outputText id="personnel" value="#{ficheAnomalieController.selected.personnel.nom}" title="Libelle" />
+                    <h:outputLabel value="Domaine" for="domaine" style="font-weight: bold;"/>
+                    <h:outputText id="domaine" value="#{ficheAnomalieController.selected.domaine.libelle}" title="Libelle" />
+                     <h:outputLabel value="Processus" for="processus" style="font-weight: bold;"/>
+                    <h:outputText id="processus" value="#{ficheAnomalieController.selected.processus.intitule}" title="Libelle" />
+                     <h:outputLabel value="Origine" for="origine" style="font-weight: bold;" />
+                    <h:outputText id="origine" value="#{ficheAnomalieController.selected.origine.libelleOrigine}" title="Libelle" />
+                     <h:outputLabel value="Chapitre" for="chapitre" style="font-weight: bold;"/>
+                    <h:outputText id="chapitre" value="#{ficheAnomalieController.selected.chapitre.designation}" title="Libelle" />
+              </h:panelGrid>
+               <p:separator />
+              
+              <h:panelGrid  columns="2" cellpadding="10" >
+                    <h:outputLabel  value="Les actions correctives :" style="font-weight: bold;text-decoration: underline;" /><h:outputLabel value=" "></h:outputLabel>
+                    <h:outputLabel value="Description" for="descriptionc" style="font-weight: bold;"/>
+                    <h:outputLabel id="descriptionc" value="#{ficheAnomalieController.selected.actionCorrective.description}"/>
+                    <h:outputLabel value="Les actions curatives :" style="font-weight: bold;text-decoration: underline;"/><h:outputLabel value=" "></h:outputLabel>
+                    <h:outputLabel value="Descritption" for="description" style="font-weight: bold;"></h:outputLabel>
+                    <h:outputLabel id="description" value="#{ficheAnomalieController.selected.actionCurative.description}"></h:outputLabel>
+             </h:panelGrid>
+             <p:separator /><br/>
+             <h:outputLabel  value="Vérification de l'application des Actions:" style="font-weight: bold;text-decoration: underline;" />
+             <h:panelGrid  columns="2" cellpadding="10" >    
+                    <h:outputLabel value="Les actions curatives :" style="font-weight: bold;"/>
+                    <h:selectOneRadio  value="#{ficheAnomalieController.selected.appCurative}">  
+                    <f:selectItem itemLabel="Oui" itemValue="#{true}" />
+            		<f:selectItem itemLabel="Non" itemValue="#{false}" />  
+            		</h:selectOneRadio>                    
+            		<h:outputLabel value="Les actions correctives  :" style="font-weight: bold;"/>
+                    <h:selectOneRadio  value="#{ficheAnomalieController.selected.appCorrective}">  
+                    <f:selectItem itemLabel="Oui" itemValue="#{true}"  />
+            		<f:selectItem itemLabel="Non" itemValue="#{false}" />  
+        		    </h:selectOneRadio> 
+        	</h:panelGrid>
+        	 <p:separator /><br/>
+                <h:outputLabel value="Vérification de l'efficacité des Actions" style="font-weight: bold;text-decoration: underline;"></h:outputLabel>
+              <h:panelGrid columns="2" cellpadding="10" >
+               <h:outputLabel value="Criteres efficacité des actions Curatives"   />
+                    <h:outputLabel  value="#{ficheAnomalieController.selected.critereCurative}" />
+        		    <h:outputLabel value="Criteres efficacité des actions Corrective"  />
+                    <h:outputLabel  value="#{ficheAnomalieController.selected.critereCorrective}" />
+        		   
+                     <h:outputLabel value="Vérification efficacité des actions Curatives"  />
+                    
+                    <h:selectOneRadio  value="#{ficheAnomalieController.selected.efficaciteCurative}"> 
+                    <f:selectItem itemLabel="Efficaces" itemValue="#{true}" /> 
+            		<f:selectItem itemLabel="Non efficaces" itemValue="#{false}" />  
+           			</h:selectOneRadio> 
+                    <h:outputLabel value="Vérification efficacité des actions Correctives"  />
+                    <h:selectOneRadio  value="#{ficheAnomalieController.selected.efficaciteCorrective}"> 
+                    <f:selectItem itemLabel="Efficaces" itemValue="#{true}" /> 
+            		<f:selectItem itemLabel="Non efficaces" itemValue="#{false}" />  
+           			</h:selectOneRadio> 
+        		    <h:outputLabel value="Commentaires sur les actions en cas de diffculté d'application"  />
+        		    <h:outputLabel  value="#{ficheAnomalieController.selected.commentaire}"  />
+        		     <h:outputLabel value="Etat de cloture"  />
+        		    <h:outputLabel  value="#{ficheAnomalieController.selected.etatFiche}"  />
+              </h:panelGrid>
+                </h:panelGrid>
+                <br />
+               
+                <p:commandButton action="#{ficheAnomalieController.retour}" value="Retour" icon="ui-icon ui-icon-check" />
+                
+                <p:commandButton id="btn" value="Imprimer" >
+                      <p:printer target="output" />
+               </p:commandButton>
+            
+              
+            </h:form>
+    
+
+		</ui:define>
+		</ui:composition>

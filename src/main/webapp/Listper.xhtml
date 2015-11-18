@@ -1,0 +1,154 @@
+<ui:composition template="/templateLPEE.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+	<ui:define name="Title">
+		Gestion des personnels
+	</ui:define>
+	
+	<ui:define name="content" >
+	
+	
+		<h:form id="form" >
+		<p:growl id="growl" showDetail="true" sticky="false" />
+
+			<p:dataTable value="#{personnelController.listPersonnel()}" var="item" id="table1" paginator="true"
+				rows="5" emptyMessage="Personnel non trouvé"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" >
+				<p:column headerText="Matricule">
+					
+					<h:outputText value="#{item.matricule}" />
+				</p:column>
+				<p:column headerText="Nom">
+				
+					<h:outputText value="#{item.nom}" />
+				</p:column>
+				<p:column headerText="Prenom">
+				
+					<h:outputText value="#{item.prenom}" />
+				</p:column>
+				<p:column headerText="Diplome">
+				
+					<h:outputText value="#{item.diplome}" />
+				</p:column>
+				<p:column headerText="Grade">
+				
+					<h:outputText value="#{item.grade}" />
+				</p:column>
+				<p:column headerText="Profile">
+				
+					<h:outputText value="#{item.profile}" />
+				</p:column>
+				<p:column headerText="Date Embauche">
+				
+					<h:outputText value="#{item.dateEmbauche}" />
+				</p:column>
+				<p:column headerText="Editer">
+					
+					<p:commandButton  value ="Editer" update=":form1:pnl" icon="ui-icon-pencil" oncomplete="PF('OrUDialog').show()" title="Modification"  style="float:left;margin-right:10px">
+					 <f:setPropertyActionListener value="#{item}" target="#{personnelController.selected}"/>
+					 </p:commandButton>
+				</p:column>
+				<p:column headerText="supprimer" >
+					
+					<p:commandButton value="Delete"  icon="ui-icon-trash" update=":form:table1, :form:growl" actionListener="#{personnelController.delete}">
+					<f:setPropertyActionListener value="#{item}" target="#{personnelController.selected}"/>
+					<p:confirm header="Confirmation" message="Etes-vous sûr ?" icon="ui-icon-alert" />
+					
+ 				</p:commandButton>
+ 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+				        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			   		</p:confirmDialog>
+				</p:column>
+				<f:facet name="footer">
+					<p:outputPanel>	
+					<p:commandButton value="Ajouter un Prersonnel" icon="ui-icon-adds"
+						actionListener="#{personnelController.ajoutEventP}"
+						update=":form2:pnl1" oncomplete="PF('OrADialog').show()" />
+					</p:outputPanel>
+				</f:facet>
+			</p:dataTable>
+			</h:form>
+	</ui:define>
+<ui:define name="contentDialog">
+		<h:form id="form1">
+    	<p:dialog header="Modification" widgetVar="OrUDialog" modal="true" dynamic="true"  resizable="false">
+        <p:growl id="growl1" showDetail="true" sticky="false"  life="100000"/>
+               <h:panelGrid id="pnl" columns="2" cellpadding="7">
+                    <p:outputLabel value="Matricule" for="matricule" />
+                    <h:outputText id="matricule" value="#{personnelController.selected.matricule}" title="matricule"  style="width: 200px" />
+             
+                     <p:outputLabel value="Nom" for="nom" />
+                    <p:inputText id="nom" value="#{personnelController.selected.nom}" title="nom" required="true" style="width: 200px" requiredMessage="Vous devez remplir le champs Nom"/>
+                   
+                     <p:outputLabel value="Prenom" for="prenom" />
+                    <p:inputText id="prenom" value="#{personnelController.selected.prenom}" title="prenom" required="true" style="width: 200px" requiredMessage="Vous devez remplir le champs Prénom"/>
+                   
+                     <p:outputLabel value="Grade" for="grade" />
+                    <p:inputText id="grade" value="#{personnelController.selected.grade}" title="grade" required="true" style="width: 200px" requiredMessage="Vous devez remplir le champs grade"/>
+             
+                     <p:outputLabel value="Profil" for="username" />
+                    <p:inputText id="username" value="#{personnelController.selected.profile}" required="true" style="width: 200px" requiredMessage="Vous devez remplir le champs profil"></p:inputText>
+                
+                    <p:outputLabel value="Diplome" for="diplome" />
+                    <p:inputText id="diplome" value="#{personnelController.selected.diplome}" required="true" title="diplome" style="width: 200px" requiredMessage="Vous devez remplir le champs diplome"/>
+                   
+                  <p:outputLabel value="Date d'Ambauche" for="date" />
+                    <p:calendar id="date" value="#{personnelController.selected.dateEmbauche}" title="date" pattern="yyyy-MM-dd"> </p:calendar>
+               
+                </h:panelGrid>
+                <br />
+                <p:commandButton action="#{personnelController.edit}" value="Modifier" image="ui-icon ui-icon-check" update=":form:table1, growl1"  oncomplete="PF('OrUDialog').hide()" style="float:right;" />
+                <br />
+                
+               
+    </p:dialog>
+	</h:form>
+	<h:form id="form2">
+    	<p:dialog header="Ajout" widgetVar="OrADialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+        <p:growl id="growl2" showDetail="true" sticky="false"  />
+             <h:panelGrid id="pnl1" columns="2" cellpadding="7">
+                   
+                   <p:outputLabel value="Matricule" for="matricule" />
+                    <p:inputText id="matricule" value="#{personnelController.selected.matricule}" title="matricule" required="true" requiredMessage="Vous devez remplir le champs Matricule"/>
+                    
+                    <p:outputLabel value="nom" for="nom" />
+                    <p:inputText id="nom" value="#{personnelController.selected.nom}" title="nom" required="true" requiredMessage="Vous devez remplir le champs Nom"/>
+                    
+                    <p:outputLabel value="prenom" for="prenom" />
+                    <p:inputText id="prenom" value="#{personnelController.selected.prenom}" title="prenom" required="true" requiredMessage="Vous devez remplir le champs Prénom"/>
+                 
+                    <p:outputLabel value="grade" for="grade" />
+                    <p:inputText id="grade" value="#{personnelController.selected.grade}" title="grade" required="true" requiredMessage="Vous devez remplir le champs grade"/>
+                 
+                    <p:outputLabel value="diplome" for="diplome" />
+                    <p:inputText id="diplome" value="#{personnelController.selected.diplome}" title="diplome" required="true" requiredMessage="Vous devez remplir le champs diplome"/>
+                 
+                    <p:outputLabel value="Profil" for="username" />
+                    <p:inputText id="username" value="#{personnelController.selected.profile}" required="true" requiredMessage="Vous devez remplir le champs profil"></p:inputText>
+             
+                   
+                    <p:outputLabel value="Mot de Passe" for="motdepasse" />
+                    <p:password id="motdepasse" value="#{personnelController.selected.motdePasse}"
+		          	feedback="false" redisplay="true" requiredMessage="Vous devez remplir le champs Mot de passe" ></p:password>
+		          
+                    <p:outputLabel value="Date d'Ambauche" for="date" />
+                    <p:calendar id="date" value="#{personnelController.selected.dateEmbauche}" title="date" pattern="yyyy-MM-dd"> </p:calendar>
+                                
+                </h:panelGrid>
+                 <br />
+                <p:commandButton action="#{personnelController.create}" value="Ajouter" image="ui-icon ui-icon-check" update=":form:table1, growl2" oncomplete="PF('OrADialog').hide()" style="float:right;"/>
+                <br />
+               
+     
+    </p:dialog>
+	</h:form>
+		
+		</ui:define>
+		</ui:composition>

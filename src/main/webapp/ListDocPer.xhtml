@@ -1,0 +1,44 @@
+<ui:composition template="/templateLPEEU.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:define name="Title">
+		Liste des documents
+	</ui:define>
+<ui:define name="content" >
+	
+		<h:form >
+		
+
+			<p:dataTable value="#{documentController.listdocsbyper()}" var="item" id="a1" emptyMessage="Document non trouvé" paginator="true"
+				rows="6"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="6,12,18" >
+				
+				<p:column headerText="Intitule de document">
+				
+					<h:outputText value="#{item.intituleDoc}" />
+				</p:column>
+				
+				
+				<p:column headerText="Date Application">
+				
+					<h:outputText value="#{item.dateApplication}" />
+				</p:column>
+				<p:column style="width:20%" exportable="false">
+				
+				 <p:commandButton value="Télécharger" ajax="false"  actionListener="#{documentController.FileDownloaddoc}"  icon="ui-icon-arrowthick-1-s">
+					        	<f:param name="id" value="#{item.refDoc}"/>
+					        <p:fileDownload value="#{documentController.fileDow}" />
+					    </p:commandButton>
+				</p:column>
+			
+			</p:dataTable>
+			
+		
+		</h:form>
+
+</ui:define>
+</ui:composition>

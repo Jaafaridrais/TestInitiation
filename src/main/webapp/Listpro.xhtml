@@ -1,0 +1,97 @@
+<ui:composition template="/templateLPEE.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:define name="Title">
+		Gestion des processus
+	</ui:define>
+	
+	
+	<ui:define name="content" >
+	
+	
+		<h:form id="form" >
+		<p:growl id="growl" showDetail="true" sticky="false" />
+
+			<p:dataTable value="#{processusController.listProcessus()}" var="item" id="table1" paginator="true"
+				rows="5" emptyMessage="Processus non trouvé"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" >
+				
+				<p:column headerText="Numéro">
+					
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Désignation">
+				
+					<h:outputText value="#{item.intitule}" />
+				</p:column>
+				<p:column headerText="Editer">
+					
+					<p:commandButton  value ="Editer" update=":form1:pnl" icon="ui-icon-pencil" oncomplete="PF('OrUDialog').show()" title="Modification"  style="float:left;margin-right:10px">
+					 <f:setPropertyActionListener value="#{item}" target="#{processusController.selected}"/>
+					 </p:commandButton>
+				</p:column>
+				<p:column headerText="supprimer" >
+					
+					<p:commandButton value="Delete"  icon="ui-icon-trash" update=":form:table1, :form:growl" actionListener="#{processusController.delete}">
+					<f:setPropertyActionListener value="#{item}" target="#{processusController.selected}"/>
+					<p:confirm header="Confirmation" message="Etes-vous sûr ?" icon="ui-icon-alert" />
+					
+ 				</p:commandButton>
+ 				<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+				        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			   		</p:confirmDialog>
+				</p:column>
+				<f:facet name="footer">
+					<p:outputPanel>	
+					<p:commandButton value="Ajouter un Processus" icon="ui-icon-adds"
+						actionListener="#{processusController.ajoutEventP}"
+						update=":form2:pnl1" oncomplete="PF('OrADialog').show()" />
+					</p:outputPanel>
+				</f:facet>
+			</p:dataTable>
+			</h:form>
+	</ui:define>
+<ui:define name="contentDialog">
+		<h:form id="form1">
+    	<p:dialog header="Modification" widgetVar="OrUDialog" modal="true" dynamic="true"  resizable="false">
+        <p:growl id="growl1" showDetail="true" sticky="false"  life="100000"/>
+               <h:panelGrid id="pnl" columns="2" cellpadding="7">
+                     <p:outputLabel value="Numéro" for="identifient" />
+                    <h:outputText id="identifient" value="#{processusController.selected.id}" title="ID" style="width: 200px"/>
+                     <p:outputLabel value="Désignation" for="libelle" />
+                    <p:inputText id="libelle" value="#{processusController.selected.intitule}" title="Libelle" required="true" style="width: 200px" requiredMessage="Vous devez remplir le champs intitule"/>
+               
+                </h:panelGrid>
+                <br />
+                <p:commandButton action="#{processusController.edit}" value="Modifier" image="ui-icon ui-icon-check" update=":form:table1, growl1"  oncomplete="PF('OrUDialog').hide()" style="float:right;" />
+                <br />
+                
+               
+    </p:dialog>
+	</h:form>
+	<h:form id="form2">
+    	<p:dialog header="Ajout" widgetVar="OrADialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+        <p:growl id="growl2" showDetail="true" sticky="false"  />
+             <h:panelGrid id="pnl1" columns="2" cellpadding="7">
+                   
+                   <p:outputLabel  value="Désignation" for="libelle" />
+                   
+                    <p:inputText id="libelle" value="#{processusController.selected.intitule}" title="Libelle" required="true" requiredMessage="Vous devez remplir le champs intitule"/>
+               
+                </h:panelGrid>
+                 <br />
+                <p:commandButton action="#{processusController.create}" value="Ajouter" image="ui-icon ui-icon-check" update=":form:table1, growl2" oncomplete="PF('OrADialog').hide()" style="float:right;"/>
+                <br />
+               
+     
+    </p:dialog>
+	</h:form>
+		
+		</ui:define>
+		</ui:composition>
